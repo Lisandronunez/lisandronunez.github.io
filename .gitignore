@@ -8,3 +8,8 @@ _privado/
 # Sistema
 Thumbs.db
 .DS_Store
+
+# Archivos de prueba
+_prueba.pdf
+_t.html
+_pv*.html

@@ -9,52 +9,52 @@ const proyectos = [
   {
     idx: '01', nombre: 'Tamboril News', cat: 'Periódico digital',
     desc: 'Portal de noticias con gestión de contenidos por secciones, portada editable y optimización SEO para alta concurrencia.',
-    img: 'img/proyectos/tamboril-news.png'
+    img: 'img/proyectos/tamboril-news.webp'
   },
   {
     idx: '02', nombre: 'Sernoticia', cat: 'Periódico digital',
     desc: 'Periódico digital con publicación por secciones, contenido multimedia y rendimiento optimizado en móviles.',
-    img: 'img/proyectos/sernoticia.jpg'
+    img: 'img/proyectos/sernoticia.webp'
   },
   {
     idx: '03', nombre: 'Aguajero', cat: 'Periódico digital',
     desc: 'Portal informativo con portada por categorías (actualidad, deportes, economía, tecnología, salud), bloque de lo más leído y espacios publicitarios administrables.',
-    img: 'img/proyectos/aguajero.jpg'
+    img: 'img/proyectos/aguajero.webp'
   },
   {
     idx: '04', nombre: 'Destino Travel RD', cat: 'Portal de viajes',
     desc: 'Sitio turístico con presentación visual de destinos, paquetes y canales de reserva y contacto.',
-    img: 'img/proyectos/destino-travel-rd.jpg'
+    img: 'img/proyectos/destino-travel-rd.webp'
   },
   {
     idx: '05', nombre: 'Hipermercado La Fuente', cat: 'Retail corporativo',
     desc: 'Plataforma institucional para exhibición de productos, ofertas, sucursales y atención al cliente.',
-    img: 'img/proyectos/hipermercado-la-fuente.jpg'
+    img: 'img/proyectos/hipermercado-la-fuente.webp'
   },
   {
     idx: '06', nombre: 'Inmobiliaria Bolívar Rosa', cat: 'Portal inmobiliario',
     desc: 'Catálogo de propiedades con fichas detalladas, filtros de búsqueda y contacto directo con el agente.',
-    img: 'img/proyectos/bolivar-rosa.png'
+    img: 'img/proyectos/bolivar-rosa.webp'
   },
   {
     idx: '07', nombre: 'Claso Consultores', cat: 'Consultoría corporativa',
     desc: 'Sitio corporativo de una empresa consultora con presencia en Latinoamérica: líneas de servicio, inscripción en línea, solicitud de consultoría y registro de currículum.',
-    img: 'img/proyectos/claso-consultores.png'
+    img: 'img/proyectos/claso-consultores.webp'
   },
   {
     idx: '08', nombre: 'NIXAURYS Global Cleaning', cat: 'Servicios corporativos',
     desc: 'Sitio corporativo de servicios de limpieza empresarial con catálogo de servicios y solicitud de cotización.',
-    img: 'img/proyectos/nixaurys.jpg'
+    img: 'img/proyectos/nixaurys.webp'
   },
   {
     idx: '09', nombre: 'Gala Cosmetic S.A.', cat: 'Distribución / cosmética',
     desc: 'Portal comercial para distribución de productos cosméticos, con catálogo por líneas y marcas.',
-    img: 'img/proyectos/gala-cosmetic.jpg'
+    img: 'img/proyectos/gala-cosmetic.webp'
   },
   {
     idx: '10', nombre: 'BJ Rosa & Asociados', cat: 'Corporativo / legal',
     desc: 'Sitio institucional para firma de abogados: áreas de práctica, equipo y canales de contacto formal.',
-    img: 'img/proyectos/bj-rosa.png'
+    img: 'img/proyectos/bj-rosa.webp'
   }
 ];
 
@@ -64,7 +64,7 @@ if (grid) {
     <article class="project-card reveal" data-d="${(i % 4) + 1}">
       <div class="project-cover">
         <span class="project-idx">${p.idx}</span>
-        <img src="${p.img}" alt="Captura del sitio ${p.nombre}" loading="lazy">
+        <img src="${p.img}" alt="Captura del sitio ${p.nombre}" loading="lazy" decoding="async">
       </div>
       <div class="project-body">
         <span class="project-cat">${p.cat}</span>
@@ -236,11 +236,29 @@ document.querySelectorAll('[data-copy]').forEach(btn => {
    incluida la información de contacto aunque esté oculta.        */
 const pdfButtons = document.querySelectorAll('[data-pdf]');
 
+// jsPDF pesa 356 KB: no se descarga al abrir la página, solo cuando
+// alguien pide el PDF. La promesa se guarda para no cargarlo dos veces.
+let jspdfPendiente = null;
+function cargarJsPDF() {
+  if (window.jspdf) return Promise.resolve();
+  if (!jspdfPendiente) {
+    jspdfPendiente = new Promise((resolve, reject) => {
+      const et = document.createElement('script');
+      et.src = 'assets/vendor/jspdf.umd.min.js';
+      et.onload = resolve;
+      et.onerror = () => { jspdfPendiente = null; reject(new Error('No se pudo cargar jsPDF')); };
+      document.head.appendChild(et);
+    });
+  }
+  return jspdfPendiente;
+}
+
 async function generarPDF() {
   pdfButtons.forEach(b => { b.disabled = true; });
   showToast('Generando PDF...');
 
   try {
+    await cargarJsPDF();
     if (typeof window.generarPortafolioPDF !== 'function') {
       throw new Error('El generador de PDF no está cargado');
     }
