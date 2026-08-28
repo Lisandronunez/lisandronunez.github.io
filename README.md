@@ -6,7 +6,7 @@ Construyo sistemas empresariales que se usan todos los días: facturación elect
 homologada por la DGII**, contabilidad, inventario, CRM y portales corporativos — desde la
 arquitectura de la base de datos hasta el despliegue y el soporte en producción.
 
-Actualmente en **Teksoft**. En paralelo diseño y opero mis propios productos: **EdFactura** y
+Actualmente trabajo en una empresa **Privada**. En paralelo diseño y opero mis propios productos: **EdFactura** y
 **Alutecs Services**.
 
 ### 🌐 [lisandronunez.github.io](https://lisandronunez.github.io/)
