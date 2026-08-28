@@ -1,0 +1,10 @@
+# Archivos de trabajo que no se publican
+_privado/
+
+# Visual Studio
+.vs/
+*.slnx
+
+# Sistema
+Thumbs.db
+.DS_Store
