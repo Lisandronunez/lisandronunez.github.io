@@ -330,7 +330,7 @@ html[data-theme="dark"] .i-moon{display:none;}
 @keyframes scrollX{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* ---------- SECCIONES ---------- */
-.section{padding:96px 0;position:relative;}
+.section{padding:36px 0;position:relative;}
 .sec-head{max-width:760px;margin-bottom:46px;}
 .sec-head-center{margin-left:auto;margin-right:auto;text-align:center;}
 .sec-num{
